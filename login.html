@@ -1,155 +1,131 @@
+<!-- index.html -->
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login UMKM</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UMKM Store</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: linear-gradient(120deg, #0ea5e9, #2563eb, #4338ca);
-      background-size: 300% 300%;
-      animation: gradientMove 8s ease infinite;
-    }
-
-    @keyframes gradientMove {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
-    }
-
-    .login-container {
-      width: 380px;
-      padding: 35px;
-      backdrop-filter: blur(10px);
-      background: rgba(255, 255, 255, 0.13);
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.3);
-      box-shadow: 0 10px 35px rgba(0,0,0,0.2);
-      color: white;
-      text-align: center;
-    }
-
-    .login-container h2 {
-      margin-bottom: 10px;
-      font-size: 26px;
-      font-weight: bold;
-    }
-
-    .login-container p {
-      margin-bottom: 25px;
-      font-size: 14px;
-      opacity: 0.9;
-    }
-
-    .input-group {
-      text-align: left;
-      margin-bottom: 18px;
-    }
-
-    .input-group label {
-      font-size: 13px;
-      opacity: 0.9;
-    }
-
-    .input-group input {
-      width: 100%;
-      padding: 12px;
-      margin-top: 6px;
-      border-radius: 12px;
-      border: none;
-      outline: none;
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      font-size: 15px;
-    }
-
-    .role-toggle {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-
-    .role-toggle button {
-      width: 48%;
-      padding: 10px;
-      border-radius: 12px;
-      border: none;
-      cursor: pointer;
-      background: rgba(255,255,255,0.2);
-      color: white;
-      font-size: 14px;
-    }
-
-    .role-toggle .active {
-      background: white;
-      color: #2563eb;
-      font-weight: bold;
-    }
-
-    .login-btn {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      background: white;
-      color: #2563eb;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.2s;
-    }
-
-    .login-btn:hover {
-      transform: scale(1.03);
-    }
-
+    body {font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f4f4;}
+    header {background: #4A7BF7; color: #fff; padding: 20px; text-align: center;}
+    nav {text-align: center; margin-top: 15px;}
+    nav a {margin: 0 10px; text-decoration: none; color: #4A7BF7; font-weight: bold;}
+    .product-grid {display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 20px; padding: 20px;}
+    .card {background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);}    
+    .card img {width: 100%; border-radius: 10px;}
   </style>
 </head>
 <body>
+  <header>
+    <h1>UMKM Store</h1>
+  </header>
+  <nav>
+    <a href="login.html">Login</a>
+    <a href="signup.html">Sign Up</a>
+  </nav>
+  <div class="product-grid" id="productList"></div>
 
-  <div class="login-container">
-    <h2>Masuk Akun</h2>
-    <p>Pilih peranmu lalu lanjutkan login.</p>
+<script>
+let products = JSON.parse(localStorage.getItem("products")) || [];
+function loadProducts(){
+  const container = document.getElementById("productList"); container.innerHTML = "";
+  products.forEach(p => {
+    container.innerHTML += `
+      <div class='card'>
+        <img src='${p.image}' alt=''>
+        <h3>${p.name}</h3>
+        <p>${p.price}</p>
+      </div>`;
+  });
+}
+loadProducts();
+</script>
+</body></html>
 
-    <div class="role-toggle">
-      <button id="pembeliBtn" class="active">Pembeli</button>
-      <button id="penjualBtn">Penjual</button>
-    </div>
 
-    <div class="input-group">
-      <label>Email</label>
-      <input type="text" placeholder="Masukkan email" />
-    </div>
+<!-- login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+<style>
+  body {display:flex; justify-content:center; align-items:center; height:100vh; background:#e8ecf8; font-family:Arial;}
+  .box {background:white; padding:30px; border-radius:14px; width:350px; box-shadow:0 4px 15px rgba(0,0,0,0.1);}  
+  input {width:100%; padding:12px; margin:10px 0; border-radius:8px; border:1px solid #ccc;}  
+  button {width:100%; padding:12px; background:#4A7BF7; color:white; border:none; border-radius:8px; font-size:16px; cursor:pointer;}  
+  .google {background:white; border:1px solid #999; color:#444; margin-top:10px;}  
+</style>
+</head>
+<body>
+<div class="box">
+  <h2>Login</h2>
+  <input type="email" id="loginEmail" placeholder="Email">
 
-    <div class="input-group">
-      <label>Password</label>
-      <input type="password" placeholder="Masukkan password" />
-    </div>
-
-    <button class="login-btn">Masuk</button>
+  <div style="position:relative;">
+    <input type="password" id="loginPassword" placeholder="Password">
+    <span onclick="toggleLoginPassword()" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer;">👁️</span>
   </div>
 
-  <script>
-    const pembeliBtn = document.getElementById('pembeliBtn');
-    const penjualBtn = document.getElementById('penjualBtn');
+  <button onclick="loginUser()">Login</button>
+  <button class="google" onclick="googleLogin()">Login with Google</button>
+</div>
 
-    pembeliBtn.onclick = () => {
-      pembeliBtn.classList.add('active');
-      penjualBtn.classList.remove('active');
-    };
+<script>
+function toggleLoginPassword(){
+  const pw = document.getElementById('loginPassword'); pw.type = pw.type === 'password' ? 'text' : 'password';
+}
+function loginUser(){
+  let users = JSON.parse(localStorage.getItem('users')) || [];
+  let email = loginEmail.value;
+  let pass = loginPassword.value;
+  let found = users.find(u => u.email === email && u.password === pass);
+  if(found){ alert("Login berhasil"); window.location.href = 'index.html'; }
+  else alert("Akun tidak ditemukan");
+}
+function googleLogin(){ alert("Google Login Demo"); }
+</script>
+</body></html>
 
-    penjualBtn.onclick = () => {
-      penjualBtn.classList.add('active');
-      pembeliBtn.classList.remove('active');
-    };
-  </script>
 
-</body>
-</html>
+<!-- signup.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up</title>
+<style>
+  body {display:flex; justify-content:center; align-items:center; height:100vh; background:#e8ecf8; font-family:Arial;}
+  .box {background:white; padding:30px; border-radius:14px; width:350px; box-shadow:0 4px 15px rgba(0,0,0,0.1);}  
+  input {width:100%; padding:12px; margin:10px 0; border-radius:8px; border:1px solid #ccc;}  
+  button {width:100%; padding:12px; background:#4A7BF7; color:white; border:none; border-radius:8px; font-size:16px; cursor:pointer;}  
+</style>
+</head>
+<body>
+<div class="box">
+  <h2>Sign Up</h2>
+  <input type="text" id="signupName" placeholder="Nama">
+  <input type="email" id="signupEmail" placeholder="Email">
+  <input type="password" id="signupPassword" placeholder="Password">
+  <button onclick="registerUser()">Daftar</button>
+</div>
+
+<script>
+function registerUser(){
+  let users = JSON.parse(localStorage.getItem('users')) || [];
+  let user = {
+    name: signupName.value,
+    email: signupEmail.value,
+    password: signupPassword.value
+  };
+  users.push(user);
+  localStorage.setItem('users', JSON.stringify(users));
+  alert('Akun berhasil dibuat');
+  window.location.href = 'login.html';
+}
+</script>
+</body></html>
+
+<!-- Firebase Auth integration guide will be added here: TODO -->
