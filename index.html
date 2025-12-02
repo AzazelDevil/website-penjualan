@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Toko UMKM</title>
+  <title>UMKM Store + Login</title>
 
   <style>
     :root {
@@ -34,35 +34,11 @@
       z-index: 10;
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 1.6rem;
-      font-weight: 600;
-    }
-
-    header input {
-      padding: 10px 16px;
-      border-radius: var(--radius);
-      border: 1px solid #ccc;
-      width: 250px;
-    }
-
     .hero {
-      padding: 80px 40px;
+      padding: 70px 40px;
       text-align: center;
       background: linear-gradient(135deg, #0ab59b, #07836f);
       color: white;
-    }
-
-    .hero h2 {
-      font-size: 2.4rem;
-      margin-bottom: 10px;
-      font-weight: 700;
-    }
-
-    .hero p {
-      opacity: 0.9;
-      font-size: 1.1rem;
     }
 
     .produk {
@@ -77,112 +53,175 @@
       border-radius: var(--radius);
       padding: 20px;
       box-shadow: var(--shadow);
-      transition: transform .2s ease, box-shadow .2s ease;
+      transition: .2s;
     }
 
     .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+      transform: translateY(-4px);
     }
 
-    .card img {
-      width: 100%;
+    .login-panel {
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 24px;
+      background: var(--card-bg);
       border-radius: var(--radius);
-      height: 160px;
-      object-fit: cover;
+      box-shadow: var(--shadow);
     }
 
-    .card h3 {
-      margin: 14px 0 6px;
-      font-size: 1.2rem;
-    }
-
-    .price {
-      font-weight: 600;
-      color: var(--primary);
-      margin-bottom: 10px;
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: var(--radius);
+      border: 1px solid #aaa;
     }
 
     button {
-      width: 100%;
       padding: 12px;
+      width: 100%;
       border: none;
       background: var(--primary);
       color: white;
       border-radius: var(--radius);
-      font-size: 1rem;
+      margin-top: 16px;
       cursor: pointer;
-      transition: background .2s ease;
     }
 
-    button:hover {
-      background: #089b84;
-    }
-
-    footer {
-      text-align: center;
-      padding: 30px;
-      color: #555;
-      margin-top: 40px;
+    #panel-penjual {
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 24px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      display: none;
     }
   </style>
 </head>
 
 <body>
 
-  <header>
-    <h1>UMKM Store</h1>
-    <input type="text" id="search" placeholder="Cari produk...">
-  </header>
+<header>
+  <h1>UMKM Store</h1>
+  <div id="status"></div>
+</header>
 
-  <section class="hero">
-    <h2>Dukung Produk Lokal</h2>
-    <p>Belanja produk UMKM berkualitas dengan harga bersahabat.</p>
-  </section>
+<div id="login-section" class="login-panel">
+  <h2>Masuk</h2>
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
 
-  <section class="produk" id="produk-list">
-    
-    <!-- Dibangkitkan lewat JS -->
-    
-  </section>
+  <select id="role">
+    <option value="pembeli">Pembeli</option>
+    <option value="penjual">Penjual</option>
+  </select>
 
-  <footer>
-    © 2025 UMKM Store. Semua hak cipta dilindungi.
-  </footer>
+  <button onclick="login()">Login</button>
+</div>
 
-  <script>
-    const produk = [
+<section class="hero">
+  <h2>Dukung Produk Lokal</h2>
+  <p>Belanja produk UMKM berkualitas dengan harga terjangkau.</p>
+</section>
+
+<section id="panel-penjual">
+  <h3>Tambah Produk Baru</h3>
+  <input type="text" id="p-nama" placeholder="Nama Produk">
+  <input type="number" id="p-harga" placeholder="Harga">
+  <input type="text" id="p-img" placeholder="URL Gambar (opsional)">
+  <button onclick="tambahProduk()">Tambah Produk</button>
+</section>
+
+<section class="produk" id="produk-list"></section>
+
+<footer style="text-align:center;padding:20px;color:#555">
+  © 2025 UMKM Store
+</footer>
+
+<script>
+  // Data awal
+  let produk = JSON.parse(localStorage.getItem("produkUMKM") || "[]");
+
+  if (produk.length === 0) {
+    produk = [
       { nama: "Kopi Arabika Gayo", harga: 65000, img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93" },
       { nama: "Keripik Balado", harga: 18000, img: "https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2" },
-      { nama: "Sambal Rumahan", harga: 25000, img: "https://images.unsplash.com/photo-1604908177522-0404d0b41ca8" },
-      { nama: "Brownies Coklat", harga: 30000, img: "https://images.unsplash.com/photo-1551024601-bec78aea704b" },
+      { nama: "Sambal Rumahan", harga: 25000, img: "https://images.unsplash.com/photo-1604908177522-0404d0b41ca8" }
     ];
+  }
 
+  const status = document.getElementById("status");
+  const loginSection = document.getElementById("login-section");
+  const penjualPanel = document.getElementById("panel-penjual");
+
+  function tampilProduk() {
     const list = document.getElementById("produk-list");
-    const search = document.getElementById("search");
+    list.innerHTML = "";
+    produk.forEach(p => {
+      list.innerHTML += `
+        <div class="card">
+          <img src="${p.img}" style="width:100%;border-radius:14px;height:160px;object-fit:cover">
+          <h3>${p.nama}</h3>
+          <div style="color:#0ab59b;font-weight:600">Rp ${p.harga.toLocaleString()}</div>
+          <button>Tambah ke Keranjang</button>
+        </div>`;
+    });
+  }
+  tampilProduk();
 
-    function tampilkanProduk(data) {
-      list.innerHTML = "";
-      data.forEach(p => {
-        list.innerHTML += `
-          <div class="card">
-            <img src="${p.img}" alt="${p.nama}">
-            <h3>${p.nama}</h3>
-            <div class="price">Rp ${p.harga.toLocaleString()}</div>
-            <button>Tambah ke Keranjang</button>
-          </div>
-        `;
-      });
+  function login() {
+    const user = document.getElementById("username").value.trim();
+    const pass = document.getElementById("password").value.trim();
+    const role = document.getElementById("role").value;
+
+    if (!user || !pass) {
+      alert("Isi username dan password!");
+      return;
     }
 
-    tampilkanProduk(produk);
+    localStorage.setItem("userUMKM", JSON.stringify({ user, role }));
+    
+    status.innerHTML = "Login sebagai: " + user + " (" + role + ")";
 
-    search.addEventListener("input", e => {
-      const q = e.target.value.toLowerCase();
-      const hasil = produk.filter(p => p.nama.toLowerCase().includes(q));
-      tampilkanProduk(hasil);
-    });
-  </script>
+    loginSection.style.display = "none";
+
+    if (role === "penjual") {
+      penjualPanel.style.display = "block";
+    }
+  }
+
+  const savedUser = JSON.parse(localStorage.getItem("userUMKM") || "null");
+  if (savedUser) {
+    loginSection.style.display = "none";
+    status.innerHTML = "Login sebagai: " + savedUser.user + " (" + savedUser.role + ")";
+
+    if (savedUser.role === "penjual") {
+      penjualPanel.style.display = "block";
+    }
+  }
+
+  function tambahProduk() {
+    const nama = document.getElementById("p-nama").value;
+    const harga = document.getElementById("p-harga").value;
+    const img = document.getElementById("p-img").value || 
+      "https://images.unsplash.com/photo-1551024601-bec78aea704b";
+
+    if (!nama || !harga) {
+      alert("Isi nama dan harga!");
+      return;
+    }
+
+    produk.push({ nama, harga: Number(harga), img });
+    localStorage.setItem("produkUMKM", JSON.stringify(produk));
+
+    tampilProduk();
+
+    document.getElementById("p-nama").value = "";
+    document.getElementById("p-harga").value = "";
+    document.getElementById("p-img").value = "";
+  }
+</script>
 
 </body>
 </html>
