@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login UMKM</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+    }
+
+    .login-card {
+      width: 350px;
+      padding: 30px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+
+    .login-card h2 {
+      margin-bottom: 20px;
+      color: #0f172a;
+    }
+
+    .login-card input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      font-size: 15px;
+    }
+
+    .login-card button {
+      width: 100%;
+      padding: 12px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .login-card button:hover {
+      background: #1d4ed8;
+    }
+
+    .role-selector {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+    }
+
+    .role-selector button {
+      width: 48%;
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .role-selector button.active {
+      background: #3b82f6;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <h2>Login Akun</h2>
+    <div class="role-selector">
+      <button id="pembeliBtn" class="active">Pembeli</button>
+      <button id="penjualBtn">Penjual</button>
+    </div>
+    <input type="text" placeholder="Email" />
+    <input type="password" placeholder="Password" />
+    <button>Masuk</button>
+  </div>
+
+  <script>
+    const pembeliBtn = document.getElementById('pembeliBtn');
+    const penjualBtn = document.getElementById('penjualBtn');
+
+    pembeliBtn.onclick = () => {
+      pembeliBtn.classList.add('active');
+      penjualBtn.classList.remove('active');
+    };
+
+    penjualBtn.onclick = () => {
+      penjualBtn.classList.add('active');
+      pembeliBtn.classList.remove('active');
+    };
+  </script>
+</body>
+</html>
