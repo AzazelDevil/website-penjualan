@@ -12,76 +12,128 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+      background: linear-gradient(120deg, #0ea5e9, #2563eb, #4338ca);
+      background-size: 300% 300%;
+      animation: gradientMove 8s ease infinite;
     }
 
-    .login-card {
-      width: 350px;
-      padding: 30px;
-      background: white;
+    @keyframes gradientMove {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    .login-container {
+      width: 380px;
+      padding: 35px;
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.13);
       border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      box-shadow: 0 10px 35px rgba(0,0,0,0.2);
+      color: white;
       text-align: center;
     }
 
-    .login-card h2 {
-      margin-bottom: 20px;
-      color: #0f172a;
+    .login-container h2 {
+      margin-bottom: 10px;
+      font-size: 26px;
+      font-weight: bold;
     }
 
-    .login-card input {
+    .login-container p {
+      margin-bottom: 25px;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .input-group {
+      text-align: left;
+      margin-bottom: 18px;
+    }
+
+    .input-group label {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    .input-group input {
       width: 100%;
       padding: 12px;
-      margin: 10px 0;
+      margin-top: 6px;
       border-radius: 12px;
-      border: 1px solid #cbd5e1;
+      border: none;
+      outline: none;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
       font-size: 15px;
     }
 
-    .login-card button {
+    .role-toggle {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .role-toggle button {
+      width: 48%;
+      padding: 10px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      font-size: 14px;
+    }
+
+    .role-toggle .active {
+      background: white;
+      color: #2563eb;
+      font-weight: bold;
+    }
+
+    .login-btn {
       width: 100%;
       padding: 12px;
-      background: #2563eb;
-      color: white;
+      margin-top: 10px;
+      background: white;
+      color: #2563eb;
       border: none;
       border-radius: 12px;
       font-size: 16px;
       cursor: pointer;
-      margin-top: 10px;
+      font-weight: bold;
+      transition: 0.2s;
     }
 
-    .login-card button:hover {
-      background: #1d4ed8;
+    .login-btn:hover {
+      transform: scale(1.03);
     }
 
-    .role-selector {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 15px;
-    }
-
-    .role-selector button {
-      width: 48%;
-      background: #e2e8f0;
-      color: #0f172a;
-    }
-
-    .role-selector button.active {
-      background: #3b82f6;
-      color: white;
-    }
   </style>
 </head>
 <body>
-  <div class="login-card">
-    <h2>Login Akun</h2>
-    <div class="role-selector">
+
+  <div class="login-container">
+    <h2>Masuk Akun</h2>
+    <p>Pilih peranmu lalu lanjutkan login.</p>
+
+    <div class="role-toggle">
       <button id="pembeliBtn" class="active">Pembeli</button>
       <button id="penjualBtn">Penjual</button>
     </div>
-    <input type="text" placeholder="Email" />
-    <input type="password" placeholder="Password" />
-    <button>Masuk</button>
+
+    <div class="input-group">
+      <label>Email</label>
+      <input type="text" placeholder="Masukkan email" />
+    </div>
+
+    <div class="input-group">
+      <label>Password</label>
+      <input type="password" placeholder="Masukkan password" />
+    </div>
+
+    <button class="login-btn">Masuk</button>
   </div>
 
   <script>
@@ -98,5 +150,6 @@
       pembeliBtn.classList.remove('active');
     };
   </script>
+
 </body>
 </html>
