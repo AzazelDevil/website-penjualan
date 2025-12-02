@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UMKM Store — Toko Online</title>
+  <meta name="description" content="Template toko online untuk UMKM — mudah di-deploy ke GitHub Pages." />
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --accent:#06b6d4; --muted:#9aa6b2; --glass:rgba(255,255,255,0.03);
+      --radius:12px; --maxw:1100px; --container-padding:20px; --shadow: 0 8px 24px rgba(2,6,23,0.6);
+      --success:#10b981;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;background:linear-gradient(180deg,#071028 0%,#081621 100%);color:#e6f7fb}
+    a{color:inherit}
+    .container{max-width:var(--maxw);margin:0 auto;padding:var(--container-padding)}
+
+    /* Header */
+    header{display:flex;align-items:center;gap:16px;padding:18px 0}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#0a8aa8);display:flex;align-items:center;justify-content:center;font-weight:700}
+    .site-title{font-size:18px;font-weight:700}
+    nav{margin-left:auto;display:flex;gap:12px;align-items:center}
+    .btn{background:var(--accent);color:#012024;padding:10px 14px;border-radius:10px;border:none;font-weight:700;cursor:pointer}
+    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:9px 12px;border-radius:10px;color:var(--muted);cursor:pointer}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;margin-top:12px}
+    .hero .intro h1{font-size:28px;margin:0 0 8px}
+    .hero .intro p{color:var(--muted);margin:0 0 16px}
+    .search{display:flex;gap:8px}
+    .search input{flex:1;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02);color:#eaffff}
+
+    /* Featured product card */
+    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);box-shadow:var(--shadow)}
+    .featured img{width:100%;border-radius:10px;display:block}
+
+    /* Product grid */
+    .products{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:22px}
+    .prod{background:var(--card);padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);display:flex;flex-direction:column;gap:10px}
+    .prod img{width:100%;height:150px;object-fit:cover;border-radius:8px}
+    .prod h3{margin:0;font-size:16px}
+    .price{font-weight:700;color:var(--accent)}
+    .small{font-size:13px;color:var(--muted)}
+
+    /* Footer */
+    footer{margin-top:28px;padding:14px 0;color:var(--muted);text-align:center}
+
+    /* Modal cart */
+    .cart-btn{position:fixed;right:24px;bottom:24px;background:var(--accent);color:#012024;padding:12px 16px;border-radius:999px;box-shadow:0 8px 30px rgba(6,182,180,0.12);cursor:pointer;border:none}
+    .modal{position:fixed;right:24px;bottom:80px;width:360px;max-height:70vh;background:linear-gradient(180deg,#061822,#08212a);border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,0.04);overflow:auto;box-shadow:0 20px 50px rgba(2,6,23,0.6)}
+    .cart-item{display:flex;gap:10px;align-items:center;padding:8px;border-radius:8px}
+    .cart-item img{width:56px;height:56px;object-fit:cover;border-radius:8px}
+    .cart-footer{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+
+    /* Responsive */
+    @media (max-width:920px){.hero{grid-template-columns:1fr}.container{padding:12px}.modal{right:12px;left:12px;width:auto}}
+
+    /* Tiny helpers */
+    .muted{color:var(--muted)}
+    .flex{display:flex;align-items:center}
+    .space{height:10px}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">UM</div>
+        <div>
+          <div class="site-title">UMKM Store</div>
+          <div class="small">Toko online sederhana untuk usaha kecil</div>
+        </div>
+      </div>
+
+      <nav>
+        <button class="ghost" onclick="scrollToSection('products')">Produk</button>
+        <button class="ghost" onclick="scrollToSection('about')">Tentang</button>
+        <button class="btn" onclick="openCart()">Keranjang (<span id="cartCount">0</span>)</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="intro">
+          <h1>Dukung UMKM lokal — Belanja produk terbaik</h1>
+          <p class="muted">Koleksi produk berkualitas dari pengrajin dan produsen lokal. Kirim cepat, bayar mudah.</p>
+
+          <div class="search">
+            <input id="q" placeholder="Cari produk, contoh: sambal, kerajinan" oninput="filterProducts()"/>
+            <button class="btn" onclick="filterProducts()">Cari</button>
+          </div>
+
+          <div class="space"></div>
+
+          <div style="display:flex;gap:10px">
+            <div class="card featured" style="flex:1">
+              <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=60" alt="Featured product" />
+              <div style="margin-top:10px"><strong>Sambal Murni Pedas</strong></div>
+              <div class="muted">Pedas, tanpa pengawet — dikirim hari ini</div>
+            </div>
+            <div class="card" style="width:220px">
+              <div style="font-weight:700">Promo Hari Ini</div>
+              <div class="muted" style="margin-top:6px">Diskon 10% untuk pembelian 2 produk</div>
+            </div>
+          </div>
+        </div>
+
+        <aside>
+          <div class="card">
+            <div style="font-weight:700">Informasi Toko</div>
+            <div class="muted" style="margin-top:6px">Alamat: Jl. Contoh No.1, Kota Anda</div>
+            <div class="muted">WA: 0812-xxxx-xxxx</div>
+            <div style="margin-top:10px"><button class="btn" onclick="scrollToSection('contact')">Hubungi Penjual</button></div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="products">
+        <h2 style="margin-top:28px">Produk Kami</h2>
+        <div class="products" id="productGrid">
+          <!-- Product cards injected by JS -->
+        </div>
+      </section>
+
+      <section id="about">
+        <h2 style="margin-top:28px">Tentang UMKM Store</h2>
+        <p class="muted">UMKM Store dibuat untuk membantu penjual lokal memasarkan produknya secara online. Template ini mudah di-deploy ke GitHub Pages atau hosting statis lain.</p>
+      </section>
+
+      <section id="contact">
+        <h2 style="margin-top:28px">Kontak</h2>
+        <p class="muted">Isi formulir sederhana untuk menerima pesanan atau informasi produk.</p>
+        <div style="margin-top:10px;max-width:600px">
+          <input id="name" placeholder="Nama" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff;margin-bottom:8px" />
+          <input id="phone" placeholder="No. WA" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff;margin-bottom:8px" />
+          <textarea id="msg" placeholder="Pesan" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff;margin-bottom:8px"></textarea>
+          <button class="btn" onclick="submitContact()">Kirim</button>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <div class="muted">© "UMKM Store" — Template siap pakai. Deploy ke GitHub Pages dengan mudah.</div>
+    </footer>
+
+    <!-- Cart & modal (hidden initially) -->
+    <button class="cart-btn" id="cartToggle" onclick="toggleCart()">Keranjang (<span id="cartToggleCount">0</span>)</button>
+    <div id="cartModal" class="modal" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><strong>Keranjang</strong><button class="ghost" onclick="closeCart()">Tutup</button></div>
+      <div id="cartItems"></div>
+      <div class="cart-footer"><div class="small muted">Total:</div><div style="font-weight:700" id="cartTotal">Rp0</div></div>
+      <div style="margin-top:10px"><button class="btn" onclick="checkout()">Checkout</button></div>
+    </div>
+
+  </div>
+
+  <script>
+    // Sample product data (replace with your own or API)
+    const products = [
+      {id:1,name:'Sambal Murni',price:25000,img:'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=60',desc:'Sambal organik tanpa pengawet.'},
+      {id:2,name:'Kerajinan Anyaman',price:120000,img:'https://images.unsplash.com/photo-1520975916092-9d6f4b4cd2b6?auto=format&fit=crop&w=800&q=60',desc:'Tas anyaman tangan, motif tradisional.'},
+      {id:3,name:'Kopi Robusta',price:90000,img:'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=60',desc:'Kopi robusta sangrai medium.'},
+      {id:4,name:'Kue Kering Tradisional',price:45000,img:'https://images.unsplash.com/photo-1601050690605-8b2b7ca9f9c6?auto=format&fit=crop&w=800&q=60',desc:'Paket kue kering lebaran, tahan 2 minggu.'},
+      {id:5,name:'Sapu Lidi Premium',price:30000,img:'https://images.unsplash.com/photo-1611095973513-2a9b0f0d3d14?auto=format&fit=crop&w=800&q=60',desc:'Sapu lidi kuat dan tahan lama.'},
+      {id:6,name:'Minyak Atsiri',price:70000,img:'https://images.unsplash.com/photo-1560184897-6c3e33c3c0b3?auto=format&fit=crop&w=800&q=60',desc:'Minyak atsiri dari tanaman lokal.'}
+    ];
+
+    // Cart management
+    const cart = [];
+    function formatRp(v){ return 'Rp'+v.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+
+    function renderProducts(list){
+      const grid = document.getElementById('productGrid'); grid.innerHTML='';
+      list.forEach(p => {
+        const el = document.createElement('div'); el.className='prod card';
+        el.innerHTML = `
+          <img src="${p.img}" alt="${p.name}"/>
+          <h3>${p.name}</h3>
+          <div class="small muted">${p.desc}</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+            <div class="price">${formatRp(p.price)}</div>
+            <div>
+              <button class="ghost" onclick="viewProduct(${p.id})">Lihat</button>
+              <button class="btn" onclick="addToCart(${p.id})">Tambah</button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(el);
+      });
+    }
+
+    function viewProduct(id){
+      const p = products.find(x=>x.id===id);
+      alert(p.name+'\n\n'+p.desc+'\nHarga: '+formatRp(p.price));
+    }
+
+    function addToCart(id){
+      const p = products.find(x=>x.id===id);
+      const found = cart.find(c=>c.id===id);
+      if(found) found.qty++;
+      else cart.push({id:p.id,name:p.name,price:p.price,qty:1,img:p.img});
+      updateCartUI();
+    }
+
+    function updateCartUI(){
+      document.getElementById('cartCount').textContent = cart.reduce((s,i)=>s+i.qty,0);
+      document.getElementById('cartToggleCount').textContent = cart.reduce((s,i)=>s+i.qty,0);
+      const el = document.getElementById('cartItems'); if(!el) return;
+      el.innerHTML='';
+      let total=0;
+      cart.forEach(item=>{
+        total += item.price*item.qty;
+        const d = document.createElement('div'); d.className='cart-item';
+        d.innerHTML = `<img src='${item.img}'/><div style='flex:1'><div style='font-weight:700'>${item.name}</div><div class='muted'>${formatRp(item.price)} x ${item.qty}</div></div><div><button class='ghost' onclick='dec(${item.id})'>-</button><button class='ghost' onclick='inc(${item.id})'>+</button></div>`;
+        el.appendChild(d);
+      });
+      document.getElementById('cartTotal').textContent = formatRp(total);
+    }
+
+    function inc(id){ const it = cart.find(c=>c.id===id); if(it){it.qty++; updateCartUI();} }
+    function dec(id){ const it = cart.find(c=>c.id===id); if(it){ it.qty--; if(it.qty<=0) cart.splice(cart.indexOf(it),1); updateCartUI(); } }
+
+    function toggleCart(){ const m=document.getElementById('cartModal'); m.style.display = (m.style.display==='none' || m.style.display==='') ? 'block' : 'none'; }
+    function openCart(){ document.getElementById('cartModal').style.display='block'; }
+    function closeCart(){ document.getElementById('cartModal').style.display='none'; }
+
+    function checkout(){ if(cart.length===0){ alert('Keranjang kosong.'); return;} alert('Checkout dummy - total: '+document.getElementById('cartTotal').textContent+'\nTerima kasih, penjual akan menghubungi via WA.'); cart.length=0; updateCartUI(); closeCart(); }
+
+    function scrollToSection(id){ document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+
+    function submitContact(){ const name=document.getElementById('name').value.trim(); const phone=document.getElementById('phone').value.trim(); const msg=document.getElementById('msg').value.trim(); if(!name||!phone||!msg){ alert('Isi semua kolom.'); return;} alert('Pesan terkirim. Penjual akan menghubungi: '+phone); document.getElementById('name').value=''; document.getElementById('phone').value=''; document.getElementById('msg').value=''; }
+
+    // Filtering search
+    function filterProducts(){ const q=document.getElementById('q').value.toLowerCase(); const filtered = products.filter(p=>p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q)); renderProducts(filtered); }
+
+    // Init
+    renderProducts(products);
+    updateCartUI();
+  </script>
+</body>
+</html>
